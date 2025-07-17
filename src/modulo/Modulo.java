@@ -4,8 +4,6 @@
  */
 package modulo;
 
-import modulo.ordenDAL.Conexion;
-import java.sql.Connection;
 
 /**
  * @author juanz
@@ -14,7 +12,7 @@ public class Modulo {
 
   
     public static void main(String[] args) {
-       Connection con = Conexion.obtenerConexion();
+       
     }
     
 }
