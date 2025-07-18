@@ -15,9 +15,7 @@ import modulo.ordenesBL.ordenesBL;
 public class frmOrdenes extends javax.swing.JFrame {
     DefaultTableModel modelo;
 
-    /**
-     * Creates new form frmOrden
-     */
+  
     public frmOrdenes() {
         initComponents();
         
@@ -25,9 +23,75 @@ public class frmOrdenes extends javax.swing.JFrame {
             modelo = new DefaultTableModel(null, titulos);
             tblOrdenes.setModel(modelo);
             
-            mostrarDatos();
+            this.mostrarDatos();
+             this.limpiar();
     }
+    
+    public void mostrarDatos(){
+        
+        while(modelo.getRowCount()>0){
+            modelo.removeRow(0);
+        
+        }
+        
+        conexion objConexion= new conexion();
+            
+        try {
+            ResultSet resultado= objConexion.consultarRegistros("SELECT*FROM Ordenes");
+            
+            while (resultado.next()) {
+                System.out.println( resultado.getString("ID"));
+                System.out.println( resultado.getString("Nombre"));
+                System.out.println( resultado.getString("Fecha"));
+                System.out.println( resultado.getString("Tipo_orden"));
+            
+            Object[] oUsuario={resultado.getString("ID"),resultado.getString("Nombre"),resultado.getString("Fecha"),resultado.getString("Tipo_orden")};      
+            
+            modelo.addRow(oUsuario);
+            
+            
+            } 
+            
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
+        
+        
+        
+    }
+    
+    public void  limpiar(){
+         txtID.setText("");
+         txtNombre.setText("");
+         txtFecha.setText("");
+         txtTipo_orden.setText("");
+            
+         btnAgregar.setEnabled(true);
+         btnEditar.setEnabled(false);
+         btnEliminar.setEnabled(false);
+        
+         
+         
+         
+     }
+        
+       
+     public ordenesBL recuperarDatosGUI(){
+         ordenesBL oOrdenes=new ordenesBL();
+         
+    int ID = txtID.getText().isEmpty() ? 0 : Integer.parseInt(txtID.getText());
+    
+    oOrdenes.setID(ID);
+    oOrdenes.setNombre(txtNombre.getText());
+    oOrdenes.setFecha(txtFecha.getText());
+   oOrdenes.setTipo_orden(txtTipo_orden.getText());
+
+    return oOrdenes;
+     }
+     
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,6 +137,7 @@ public class frmOrdenes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblOrdenes);
 
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/modulo/recursos/boton-agregar.png"))); // NOI18N
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,6 +145,7 @@ public class frmOrdenes extends javax.swing.JFrame {
             }
         });
 
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/modulo/recursos/eliminar.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,6 +153,7 @@ public class frmOrdenes extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/modulo/recursos/editar.png"))); // NOI18N
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,8 +161,15 @@ public class frmOrdenes extends javax.swing.JFrame {
             }
         });
 
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/modulo/recursos/prohibicion.png"))); // NOI18N
         btnCancelar.setText("Cancerlar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
+        txtID.setEditable(false);
         txtID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDActionPerformed(evt);
@@ -125,13 +199,13 @@ public class frmOrdenes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addGap(17, 17, 17)
                         .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancelar))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -155,7 +229,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
                                     .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +251,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
@@ -201,59 +275,11 @@ public class frmOrdenes extends javax.swing.JFrame {
         
         objConexion.ejectutarSentanciaSql(strSentenciaInsert);
               
+            this.mostrarDatos();
+            this.limpiar();
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    
-    public void mostrarDatos(){
-        
-        while(modelo.getRowCount()>0){
-            modelo.removeRow(0);
-        
-        }
-        
-        conexion objConexion= new conexion();
-            
-        try {
-            ResultSet resultado= objConexion.consultarRegistros("SELECT*FROM Ordenes");
-            
-            while (resultado.next()) {
-                System.out.println( resultado.getString("ID"));
-                System.out.println( resultado.getString("Nombre"));
-                System.out.println( resultado.getString("Fecha"));
-                System.out.println( resultado.getString("Tipo_orden"));
-            
-            Object[] oUsuario={resultado.getString("ID"),resultado.getString("Nombre"),resultado.getString("Fecha"),resultado.getString("Tipo_orden")};      
-            
-            modelo.addRow(oUsuario);
-            
-            
-            } 
-            
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        
-        
-        
-    }
-        
-       
-     public ordenesBL recuperarDatosGUI(){
-         ordenesBL oOrdenes=new ordenesBL();
-         
-    int ID = txtID.getText().isEmpty() ? 0 : Integer.parseInt(txtID.getText());
-    
-    oOrdenes.setID(ID);
-    oOrdenes.setNombre(txtNombre.getText());
-    oOrdenes.setFecha(txtFecha.getText());
-   oOrdenes.setTipo_orden(txtTipo_orden.getText());
-
-    return oOrdenes;
-     }
-    
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
@@ -266,6 +292,7 @@ public class frmOrdenes extends javax.swing.JFrame {
         objConexion.ejectutarSentanciaSql(strSentenciaInsert);
         
         this.mostrarDatos();
+        this.limpiar();
         
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -292,7 +319,10 @@ public class frmOrdenes extends javax.swing.JFrame {
                 
                 
     }
-        
+         btnAgregar.setEnabled(false);
+         btnEditar.setEnabled(true);
+         btnEliminar.setEnabled(true);
+         
         
     }//GEN-LAST:event_tblOrdenesMouseClicked
 
@@ -308,10 +338,18 @@ public class frmOrdenes extends javax.swing.JFrame {
         
         objConexion.ejectutarSentanciaSql(strSentenciaInsert);
         
-        
+        this.mostrarDatos();
+        this.limpiar();
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.limpiar();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    
+    
     /**
      * @param args the command line arguments
      */
