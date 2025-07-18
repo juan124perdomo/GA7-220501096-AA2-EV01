@@ -5,6 +5,7 @@
 package modulo.ordenesGUI;
 import modulo.ordenesDAL.conexion;
 import java.sql.ResultSet;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modulo.ordenesBL.ordenesBL;
 /**
@@ -65,6 +66,11 @@ public class frmOrdenes extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblOrdenes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrdenesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblOrdenes);
 
         btnAgregar.setText("Agregar");
@@ -166,14 +172,14 @@ public class frmOrdenes extends javax.swing.JFrame {
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
                     .addComponent(btnEliminar)
                     .addComponent(btnEditar)
                     .addComponent(btnCancelar))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -189,25 +195,17 @@ public class frmOrdenes extends javax.swing.JFrame {
                 + "VALUES (null, '%s', '%s', '%s')",oOrdenes.getNombre(),oOrdenes.getFecha(),oOrdenes.getTipo_orden());
         
         objConexion.ejectutarSentanciaSql(strSentenciaInsert);
-        try {
-            ResultSet resultado= objConexion.consultarRegistros("SELECT*FROM Ordenes");
-            
-            while (resultado.next()) {
-                System.out.println( resultado.getString("ID"));
-                System.out.println( resultado.getString("Nombre"));
-                System.out.println( resultado.getString("Fecha"));
-                System.out.println( resultado.getString("Tipo_orden"));
-            } 
-            
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-       
+              
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    
     public void mostrarDatos(){
+        
+        while(modelo.getRowCount()>0){
+            modelo.removeRow(0);
+        
+        }
         
         conexion objConexion= new conexion();
             
@@ -237,11 +235,7 @@ public class frmOrdenes extends javax.swing.JFrame {
         
     }
         
-        
-    
-   
-    
-    
+       
      public ordenesBL recuperarDatosGUI(){
          ordenesBL oOrdenes=new ordenesBL();
          
@@ -258,6 +252,16 @@ public class frmOrdenes extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
+        conexion objConexion= new conexion();
+        
+        ordenesBL oOrdenes = recuperarDatosGUI();
+        
+        String strSentenciaInsert= String.format("DELETE FROM Ordenes WHERE ID=%d ",oOrdenes.getID());
+        
+        objConexion.ejectutarSentanciaSql(strSentenciaInsert);
+        
+        this.mostrarDatos();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
@@ -267,6 +271,25 @@ public class frmOrdenes extends javax.swing.JFrame {
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaActionPerformed
+
+    private void tblOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdenesMouseClicked
+        // TODO add your handling code here:
+        
+        if(evt.getClickCount()==1){
+    
+        JTable receptor= (JTable)evt.getSource();
+        
+        txtID.setText( receptor.getModel().getValueAt(receptor.getSelectedRow(),0).toString());
+        txtNombre.setText(receptor.getModel().getValueAt(receptor.getSelectedRow(),1).toString() );
+        txtFecha.setText(receptor.getModel().getValueAt(receptor.getSelectedRow(),2).toString() );
+        txtTipo_orden.setText(receptor.getModel().getValueAt(receptor.getSelectedRow(),3).toString() );
+        
+                
+                
+    }
+        
+        
+    }//GEN-LAST:event_tblOrdenesMouseClicked
 
     /**
      * @param args the command line arguments
