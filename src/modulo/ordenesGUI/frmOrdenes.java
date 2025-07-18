@@ -5,18 +5,26 @@
 package modulo.ordenesGUI;
 import modulo.ordenesDAL.conexion;
 import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
 import modulo.ordenesBL.ordenesBL;
 /**
  *
  * @author juanz
  */
 public class frmOrdenes extends javax.swing.JFrame {
+    DefaultTableModel modelo;
 
     /**
      * Creates new form frmOrden
      */
     public frmOrdenes() {
         initComponents();
+        
+           String[] titulos = {"ID", "Nombre", "Fecha", "Tipo_orden"};
+            modelo = new DefaultTableModel(null, titulos);
+            tblOrdenes.setModel(modelo);
+            
+            mostrarDatos();
     }
 
     /**
@@ -29,7 +37,7 @@ public class frmOrdenes extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblOrden = new javax.swing.JTable();
+        tblOrdenes = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -45,7 +53,7 @@ public class frmOrdenes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tblOrden.setModel(new javax.swing.table.DefaultTableModel(
+        tblOrdenes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -54,10 +62,10 @@ public class frmOrdenes extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Fecha", "tipo_orden"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblOrden);
+        jScrollPane1.setViewportView(tblOrdenes);
 
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -136,11 +144,11 @@ public class frmOrdenes extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
                                     .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -154,7 +162,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
@@ -165,7 +173,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                     .addComponent(btnEliminar)
                     .addComponent(btnEditar)
                     .addComponent(btnCancelar))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -195,10 +203,45 @@ public class frmOrdenes extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-        
+       
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    public void mostrarDatos(){
+        
+        conexion objConexion= new conexion();
+            
+        try {
+            ResultSet resultado= objConexion.consultarRegistros("SELECT*FROM Ordenes");
+            
+            while (resultado.next()) {
+                System.out.println( resultado.getString("ID"));
+                System.out.println( resultado.getString("Nombre"));
+                System.out.println( resultado.getString("Fecha"));
+                System.out.println( resultado.getString("Tipo_orden"));
+            
+            Object[] oUsuario={resultado.getString("ID"),resultado.getString("Nombre"),resultado.getString("Fecha"),resultado.getString("Tipo_orden")};      
+            
+            modelo.addRow(oUsuario);
+            
+            
+            } 
+            
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        
+        
+        
+    }
+        
+        
+    
+   
+    
+    
      public ordenesBL recuperarDatosGUI(){
          ordenesBL oOrdenes=new ordenesBL();
          
@@ -269,7 +312,7 @@ public class frmOrdenes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblOrden;
+    private javax.swing.JTable tblOrdenes;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
