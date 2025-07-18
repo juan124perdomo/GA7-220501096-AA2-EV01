@@ -6,6 +6,9 @@ package modulo.ordenesDAL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 
 
 /**
@@ -14,7 +17,7 @@ import java.sql.DriverManager;
  */
 public class conexion {
     
-    String strConexionDB = "jdbc:sqlite:db/bd-modulo.s3db";
+    String strConexionDB = "jdbc:sqlite:C:/Users/juanz/Desktop/java-modulos/modulo/db/bd-modulo.db";
     Connection conn= null;
     
     public conexion() {
@@ -26,6 +29,18 @@ public class conexion {
         } catch (Exception e) {
             
             System.out.println("Error de coneccion :( "+e);
+        }
+    }
+    
+    public int ejectutarSentanciaSql(String strSentenciaSQL){
+        try {
+          PreparedStatement pstm= conn.prepareStatement(strSentenciaSQL);
+          pstm.executeUpdate();
+          return 1;
+                    
+        } catch (SQLException e) {
+            System.out.println(e);
+            return 0;
         }
     }
    

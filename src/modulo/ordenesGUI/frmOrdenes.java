@@ -171,6 +171,7 @@ public class frmOrdenes extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
         conexion objConexion= new conexion();
+        objConexion.ejectutarSentanciaSql("INSERT INTO Ordenes (ID, Nombre, Fecha, Tipo_orden) VALUES (null, 'contruccion de red', '18/07/2025', 'construccion')");
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
