@@ -88,6 +88,11 @@ public class frmOrdenes extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancerlar");
 
@@ -290,6 +295,22 @@ public class frmOrdenes extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_tblOrdenesMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        
+            conexion objConexion= new conexion();
+        
+        ordenesBL oOrdenes = recuperarDatosGUI();
+        
+        String strSentenciaInsert= String.format("UPDATE Ordenes SET Nombre='%s',"
+                + "Fecha='%s',Tipo_orden='%s' WHERE  ID=%d ",oOrdenes.getNombre(),oOrdenes.getFecha(),oOrdenes.getTipo_orden(), oOrdenes.getID());
+        
+        objConexion.ejectutarSentanciaSql(strSentenciaInsert);
+        
+        
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
