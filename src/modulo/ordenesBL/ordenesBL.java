@@ -34,14 +34,14 @@ public class ordenesBL {
         this.fecha = fecha;
     }
 
-    public String getTipo_de_orden() {
-        return tipo_de_orden;
+    public String getTipo_orden() {
+        return tipo_orden;
     }
 
-    public void setTipo_de_orden(String tipo_de_orden) {
-        this.tipo_de_orden = tipo_de_orden;
+    public void setTipo_orden(String tipo_orden) {
+        this.tipo_orden = tipo_orden;
     }
     
     int ID;
-     String nombre, fecha, tipo_de_orden;
+     String nombre, fecha, tipo_orden;
 }

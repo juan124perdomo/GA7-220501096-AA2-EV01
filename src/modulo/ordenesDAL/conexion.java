@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+import java.sql.ResultSet;
 
 
 /**
@@ -42,6 +42,47 @@ public class conexion {
             System.out.println(e);
             return 0;
         }
+        
+        
     }
    
+public ResultSet consultarRegistros(String strSentenciaSQL){
+            try {
+                PreparedStatement pstm= conn.prepareStatement(strSentenciaSQL);
+                ResultSet respuesta= pstm.executeQuery();
+                return respuesta;
+                
+            } catch (Exception e) {
+                System.out.println(e);
+                return null;
+            }
+            
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+

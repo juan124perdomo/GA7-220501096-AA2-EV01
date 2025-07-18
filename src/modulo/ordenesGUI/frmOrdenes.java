@@ -4,7 +4,8 @@
  */
 package modulo.ordenesGUI;
 import modulo.ordenesDAL.conexion;
-
+import java.sql.ResultSet;
+import modulo.ordenesBL.ordenesBL;
 /**
  *
  * @author juanz
@@ -39,7 +40,7 @@ public class frmOrdenes extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtTipodedato = new javax.swing.JTextField();
+        txtTipo_orden = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,7 +54,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Fecha", "tipo-de-orden"
+                "ID", "Nombre", "Fecha", "tipo_orden"
             }
         ));
         jScrollPane1.setViewportView(tblOrden);
@@ -94,7 +95,9 @@ public class frmOrdenes extends javax.swing.JFrame {
 
         jLabel3.setText("Fecha:");
 
-        jLabel4.setText("Tipo de orden:");
+        jLabel4.setText("Tipo_orden:");
+        jLabel4.setToolTipText("");
+        jLabel4.setAutoscrolls(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,7 +135,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                                 .addGap(52, 52, 52)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(txtTipodedato, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -146,14 +149,14 @@ public class frmOrdenes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTipodedato, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTipo_orden, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -162,7 +165,7 @@ public class frmOrdenes extends javax.swing.JFrame {
                     .addComponent(btnEliminar)
                     .addComponent(btnEditar)
                     .addComponent(btnCancelar))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         pack();
@@ -171,8 +174,44 @@ public class frmOrdenes extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
         conexion objConexion= new conexion();
-        objConexion.ejectutarSentanciaSql("INSERT INTO Ordenes (ID, Nombre, Fecha, Tipo_orden) VALUES (null, 'contruccion de red', '18/07/2025', 'construccion')");
+        
+        ordenesBL oOrdenes = recuperarDatosGUI();
+        
+        String strSentenciaInsert= String.format("INSERT INTO Ordenes (ID, Nombre, Fecha, Tipo_orden)"
+                + "VALUES (null, '%s', '%s', '%s')",oOrdenes.getNombre(),oOrdenes.getFecha(),oOrdenes.getTipo_orden());
+        
+        objConexion.ejectutarSentanciaSql(strSentenciaInsert);
+        try {
+            ResultSet resultado= objConexion.consultarRegistros("SELECT*FROM Ordenes");
+            
+            while (resultado.next()) {
+                System.out.println( resultado.getString("ID"));
+                System.out.println( resultado.getString("Nombre"));
+                System.out.println( resultado.getString("Fecha"));
+                System.out.println( resultado.getString("Tipo_orden"));
+            } 
+            
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+     public ordenesBL recuperarDatosGUI(){
+         ordenesBL oOrdenes=new ordenesBL();
+         
+    int ID = txtID.getText().isEmpty() ? 0 : Integer.parseInt(txtID.getText());
+    
+    oOrdenes.setID(ID);
+    oOrdenes.setNombre(txtNombre.getText());
+    oOrdenes.setFecha(txtFecha.getText());
+   oOrdenes.setTipo_orden(txtTipo_orden.getText());
+
+    return oOrdenes;
+     }
+    
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
@@ -215,10 +254,8 @@ public class frmOrdenes extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmOrdenes().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frmOrdenes().setVisible(true);
         });
     }
 
@@ -236,6 +273,6 @@ public class frmOrdenes extends javax.swing.JFrame {
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtTipodedato;
+    private javax.swing.JTextField txtTipo_orden;
     // End of variables declaration//GEN-END:variables
 }
